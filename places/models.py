@@ -10,6 +10,9 @@ class Place(models.Model):
     lat = models.FloatField(verbose_name='Широта')
     detailsUrl = models.URLField(verbose_name='URL подробностей', blank=True)
 
+    class Meta:
+        ordering = ['placeId']
+
     def __str__(self):
         return self.title
 
@@ -21,6 +24,10 @@ class Image(models.Model):
         null=True
     )
     place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='images')
+    order = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return f'{self.id} {self.place.title}'
