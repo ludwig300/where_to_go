@@ -7,30 +7,6 @@ from django.urls import reverse
 from .models import Place
 
 
-def index(request):
-    places = Place.objects.all()
-    places_data = []
-    for place in places:
-
-        places_data.append({
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [place.lng, place.lat]
-                },
-                "properties": {
-                    "title": place.title,
-                    "placeId": place.placeId,
-                    "detailsUrl": place.detailsUrl
-                }
-            }]})
-    context = {'places_data': json.dumps(places_data)}
-
-    return render(request, 'index.html', context)
-
-
 def place_detail_view(request, placeId):
     place = get_object_or_404(Place, placeId=placeId)
     place_data = {
@@ -43,4 +19,33 @@ def place_detail_view(request, placeId):
             "lat": place.lat
         }
     }
-    return JsonResponse(place_data, json_dumps_params={'ensure_ascii': False, 'indent': 4})
+    return JsonResponse(
+        place_data,
+        safe=False,
+        json_dumps_params={'ensure_ascii': False, 'indent': 4}
+    )
+
+
+def index(request):
+    places = Place.objects.all()
+    places_data = []
+    for place in places:
+        detailsUrl = reverse('place_detail_view', args=[place.placeId])
+        places_data.append({
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [place.lng, place.lat]
+                },
+                "properties": {
+                    "title": place.title,
+                    "placeId": place.placeId,
+                    "detailsUrl": detailsUrl
+                }
+            }]})
+    context = {'places_data': json.dumps(places_data)}
+
+    return render(request, 'index.html', context)
+
