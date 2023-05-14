@@ -21,25 +21,25 @@ class Command(BaseCommand):
         response.raise_for_status()
         data = response.json()
 
-        for item in data:
-            place, created = Place.objects.get_or_create(
-                title=item['title'],
-                description_short=item['description_short'],
-                description_long=item['description_long'],
-                coordinates=item['coordinates'],
-            )
+        place, created = Place.objects.get_or_create(
+            title=data['title'],
+            description_short=data['description_short'],
+            description_long=data['description_long'],
+            lng=float(data['coordinates']['lng']),
+            lat=float(data['coordinates']['lat']),
+        )
 
-            if created:
-                for img_url in item['imgs']:
-                    image_filename = os.path.basename(img_url)
-                    image_path = os.path.join(settings.MEDIA_ROOT, image_filename)
-                    response = requests.get(img_url)
-                    response.raise_for_status()
+        if created:
+            for img_url in data['imgs']:
+                image_filename = os.path.basename(img_url)
+                image_path = os.path.join(settings.MEDIA_ROOT, image_filename)
+                response = requests.get(img_url)
+                response.raise_for_status()
 
-                    image_content = ContentFile(response.content)
-                    image = Image.objects.create(place=place)
-                    image.image.save(image_filename, image_content)
+                image_content = ContentFile(response.content)
+                image = Image.objects.create(place=place)
+                image.photo.save(image_filename, image_content, save=True)
 
-                place.save()
+            place.save()
 
-                self.stdout.write(self.style.SUCCESS(f'Successfully loaded place: {place.title}'))
+            self.stdout.write(self.style.SUCCESS(f'Successfully loaded place: {place.title}'))
