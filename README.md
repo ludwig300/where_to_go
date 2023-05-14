@@ -7,6 +7,12 @@
 [Демка сайта](https://mr4silent.pythonanywhere.com/)
 
 [Админка сайта](https://mr4silent.pythonanywhere.com/admin/)
+        
+```
+login: admin
+
+password: 12345678
+```
 
 ## Установка
 
