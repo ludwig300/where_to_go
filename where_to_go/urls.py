@@ -25,5 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('places/<int:placeId>/', views.place_detail_view, name='place_detail_view')
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('places/<int:id>/', views.place_detail_view, name='place_detail_view')
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
