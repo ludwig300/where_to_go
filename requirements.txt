@@ -1,14 +1,7 @@
-asgiref==3.6.0
 Django==4.2
 django-admin-sortable2==2.1.8
 django-ckeditor==6.5.1
-django-js-asset==2.0.0
 environs==9.5.0
-jsmin==3.0.1
 leaflet==0.0.3
-marshmallow==3.19.0
-packaging==23.1
 Pillow==9.5.0
-sqlparse==0.4.4
-tzdata==2023.3
 requests==2.30.0
