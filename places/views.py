@@ -10,13 +10,13 @@ from .models import Place
 def place_detail_view(request, placeId):
     place = get_object_or_404(Place, placeId=placeId)
     place_data = {
-        "title": place.title,
-        "imgs": [request.build_absolute_uri(img.photo.url) for img in place.images.all()],
-        "description_short": place.description_short,
-        "description_long": place.description_long,
-        "coordinates": {
-            "lng": place.lng,
-            "lat": place.lat
+        'title': place.title,
+        'imgs': [request.build_absolute_uri(img.photo.url) for img in place.images.all()],
+        'description_short': place.description_short,
+        'description_long': place.description_long,
+        'coordinates': {
+            'lng': place.lng,
+            'lat': place.lat
         }
     }
     return JsonResponse(
@@ -32,17 +32,17 @@ def index(request):
     for place in places:
         detailsUrl = reverse('place_detail_view', args=[place.placeId])
         places_data.append({
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [place.lng, place.lat]
+            'type': 'FeatureCollection',
+            'features': [{
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [place.lng, place.lat]
                 },
-                "properties": {
-                    "title": place.title,
-                    "placeId": place.placeId,
-                    "detailsUrl": detailsUrl
+                'properties': {
+                    'title': place.title,
+                    'placeId': place.placeId,
+                    'detailsUrl': detailsUrl
                 }
             }]})
     context = {'places_data': json.dumps(places_data)}
