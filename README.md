@@ -7,7 +7,7 @@
 [Демка сайта](https://mr4silent.pythonanywhere.com/)
 
 [Админка сайта](https://mr4silent.pythonanywhere.com/admin/)
-
+        
 ## Установка
 
 Для запуска проекта локально выполните следующие шаги:
