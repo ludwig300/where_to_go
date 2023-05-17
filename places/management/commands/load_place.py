@@ -24,15 +24,15 @@ class Command(BaseCommand):
         place, created = Place.objects.get_or_create(
             title=place_info['title'],
             defaults={
-                'description_short': place_info['description_short'],
-                'description_long': place_info['description_long'],
-                'lng': place_info['coordinates']['lng'],
-                'lat': place_info['coordinates']['lat'],
+                'description_short': place_info.get('description_short', ''),
+                'description_long': place_info.get('description_long', ''),
+                'lng': float(place_info['coordinates']['lng']),
+                'lat': float(place_info['coordinates']['lat']),
             },
         )
 
         if created:
-            for img_url in place_info['imgs']:
+            for img_url in place_info.get('imgs', []):
                 image_filename = os.path.basename(img_url)
                 image_path = os.path.join(settings.MEDIA_ROOT, image_filename)
                 response = requests.get(img_url)
