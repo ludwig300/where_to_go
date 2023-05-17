@@ -26,8 +26,8 @@ class Command(BaseCommand):
             defaults={
                 'description_short': place_info['description_short'],
                 'description_long': place_info['description_long'],
-                'lng': float(place_info['coordinates']['lng']),
-                'lat': float(place_info['coordinates']['lat']),
+                'lng': place_info['coordinates']['lng'],
+                'lat': place_info['coordinates']['lat'],
             },
         )
 
