@@ -19,18 +19,18 @@ class Command(BaseCommand):
         json_url = options['json_url']
         response = requests.get(json_url)
         response.raise_for_status()
-        data = response.json()
+        place_info = response.json()
 
         place, created = Place.objects.get_or_create(
             title=data['title'],
-            description_short=data['description_short'],
-            description_long=data['description_long'],
-            lng=float(data['coordinates']['lng']),
-            lat=float(data['coordinates']['lat']),
+            description_short=place_info['description_short'],
+            description_long=place_info['description_long'],
+            lng=float(place_info['coordinates']['lng']),
+            lat=float(place_info['coordinates']['lat']),
         )
 
         if created:
-            for img_url in data['imgs']:
+            for img_url in place_info['imgs']:
                 image_filename = os.path.basename(img_url)
                 image_path = os.path.join(settings.MEDIA_ROOT, image_filename)
                 response = requests.get(img_url)

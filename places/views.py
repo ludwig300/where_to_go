@@ -9,7 +9,7 @@ from .models import Place
 
 def place_detail_view(request, place_id):
     place = get_object_or_404(Place, id=place_id)
-    place_data = {
+    place_serialized = {
         'title': place.title,
         'imgs': [request.build_absolute_uri(img.photo.url) for img in place.images.all()],
         'description_short': place.description_short,
@@ -20,7 +20,7 @@ def place_detail_view(request, place_id):
         }
     }
     return JsonResponse(
-        place_data,
+        place_serialized,
         safe=False,
         json_dumps_params={'ensure_ascii': False, 'indent': 4}
     )
@@ -28,10 +28,10 @@ def place_detail_view(request, place_id):
 
 def index(request):
     places = Place.objects.all()
-    places_data = []
+    places_serialized = []
     for place in places:
         detail_url = reverse('place_detail_view', args=[place.id])
-        places_data.append(
+        places_serialized.append(
             {
                 'type': 'FeatureCollection',
                 'features': [
