@@ -31,21 +31,25 @@ def index(request):
     places_data = []
     for place in places:
         detail_url = reverse('place_detail_view', args=[place.id])
-        places_data.append({
-            'type': 'FeatureCollection',
-            'features': [{
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [place.lng, place.lat]
-                },
-                'properties': {
-                    'title': place.title,
-                    'placeId': place.id,
-                    'detailsUrl': detail_url
-                }
-            }]})
+        places_data.append(
+            {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [place.lng, place.lat]
+                        },
+                        'properties': {
+                            'title': place.title,
+                            'placeId': place.id,
+                            'detailsUrl': detail_url
+                        }
+                    }
+                ]
+            }
+        )
     context = {'places_data': json.dumps(places_data)}
 
     return render(request, 'index.html', context)
-
