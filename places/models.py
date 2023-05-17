@@ -8,7 +8,6 @@ class Place(models.Model):
     description_long = RichTextField(blank=True)
     lng = models.FloatField(verbose_name='Долгота')
     lat = models.FloatField(verbose_name='Широта')
-    detailsUrl = models.URLField(verbose_name='URL подробностей', blank=True)
 
     class Meta:
         ordering = ['id']
