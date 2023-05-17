@@ -11,7 +11,7 @@ def place_detail_view(request, place_id):
     place = get_object_or_404(Place, id=place_id)
     place_serialized = {
         'title': place.title,
-        'imgs': [request.build_absolute_uri(img.photo.url) for img in place.images.all()],
+        'imgs': [img.photo.url for img in place.images.all()],
         'description_short': place.description_short,
         'description_long': place.description_long,
         'coordinates': {
@@ -50,6 +50,6 @@ def index(request):
                 ]
             }
         )
-    context = {'places_data': json.dumps(places_data)}
+    context = {'places_data': json.dumps(places_serialized)}
 
     return render(request, 'index.html', context)

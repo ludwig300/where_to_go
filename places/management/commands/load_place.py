@@ -22,11 +22,13 @@ class Command(BaseCommand):
         place_info = response.json()
 
         place, created = Place.objects.get_or_create(
-            title=data['title'],
-            description_short=place_info['description_short'],
-            description_long=place_info['description_long'],
-            lng=float(place_info['coordinates']['lng']),
-            lat=float(place_info['coordinates']['lat']),
+            title=place_info['title'],
+            defaults={
+                'description_short': place_info['description_short'],
+                'description_long': place_info['description_long'],
+                'lng': float(place_info['coordinates']['lng']),
+                'lat': float(place_info['coordinates']['lat']),
+            },
         )
 
         if created:
@@ -42,4 +44,6 @@ class Command(BaseCommand):
 
             place.save()
 
-            self.stdout.write(self.style.SUCCESS(f'Successfully loaded place: {place.title}'))
+            self.stdout.write(
+                self.style.SUCCESS(f'Successfully loaded place: {place.title}')
+            )
