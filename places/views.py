@@ -33,23 +33,22 @@ def index(request):
         detail_url = reverse('place_detail_view', args=[place.id])
         places_serialized.append(
             {
-                'type': 'FeatureCollection',
-                'features': [
-                    {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [place.lng, place.lat]
-                        },
-                        'properties': {
-                            'title': place.title,
-                            'placeId': place.id,
-                            'detailsUrl': detail_url
-                        }
-                    }
-                ]
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [place.lng, place.lat]
+                },
+                'properties': {
+                    'title': place.title,
+                    'placeId': place.id,
+                    'detailsUrl': detail_url
+                }
             }
         )
-    context = {'places_data': json.dumps(places_serialized)}
+    places_data = {
+        'type': 'FeatureCollection',
+        'features': places_serialized
+    }
+    context = {'places': json.dumps(places_data, ensure_ascii=False, indent=4)}
 
     return render(request, 'index.html', context)
