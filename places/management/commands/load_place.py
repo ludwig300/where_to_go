@@ -1,12 +1,10 @@
 import os
+
 import requests
-import json
-
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.management.base import BaseCommand
 
-from places.models import Place, Image
+from places.models import Place
 
 
 class Command(BaseCommand):
@@ -26,24 +24,22 @@ class Command(BaseCommand):
             defaults={
                 'description_short': place_info.get('description_short', ''),
                 'description_long': place_info.get('description_long', ''),
-                'lng': float(place_info['coordinates']['lng']),
-                'lat': float(place_info['coordinates']['lat']),
+                'lng': place_info['coordinates']['lng'],
+                'lat': place_info['coordinates']['lat'],
             },
         )
 
-        if created:
-            for img_url in place_info.get('imgs', []):
-                image_filename = os.path.basename(img_url)
-                image_path = os.path.join(settings.MEDIA_ROOT, image_filename)
-                response = requests.get(img_url)
-                response.raise_for_status()
+        if not created:
+            return
 
-                image_content = ContentFile(response.content)
-                image = Image.objects.create(place=place)
-                image.photo.save(image_filename, image_content, save=True)
+        for img_url in place_info.get('imgs', []):
+            image_filename = os.path.basename(img_url)
+            response = requests.get(img_url)
+            response.raise_for_status()
 
-            place.save()
+            image_content = ContentFile(response.content)
+            place.image_set.create(photo=image_content, name=image_filename)
 
-            self.stdout.write(
-                self.style.SUCCESS(f'Successfully loaded place: {place.title}')
-            )
+        self.stdout.write(
+            self.style.SUCCESS(f'Successfully loaded place: {place.title}')
+        )
