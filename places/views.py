@@ -45,10 +45,10 @@ def index(request):
                 }
             }
         )
-    places_data = {
+    places = {
         'type': 'FeatureCollection',
         'features': places_serialized
     }
-    context = {'places': json.dumps(places_data, ensure_ascii=False, indent=4)}
+    context = {'places': json.dumps(places, ensure_ascii=False, indent=4)}
 
     return render(request, 'index.html', context)
