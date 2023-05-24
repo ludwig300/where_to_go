@@ -49,7 +49,7 @@ def index(request):
         'type': 'FeatureCollection',
         'features': places_serialized
     }
-    places_json = json.dumps(places, ensure_ascii=False, indent=4)
-    context = {'places_json': places_json}
+
+    context = {'places': places}
 
     return render(request, 'index.html', context)
